@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SpyDroid</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -14,7 +19,6 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Toggle Switch */
     .theme-toggle {
       position: absolute;
       top: 15px;
@@ -28,7 +32,6 @@
       align-items: center;
       padding: 2px;
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-      transition: background-color 0.3s ease;
     }
 
     .theme-toggle .toggle-circle {
@@ -36,7 +39,7 @@
       height: 16px;
       background-color: #fff;
       border-radius: 50%;
-      transition: transform 0.3s ease, background-color 0.3s ease;
+      transition: transform 0.3s;
     }
 
     .dark-theme .theme-toggle {
@@ -48,18 +51,47 @@
       background-color: #000;
     }
 
-    /* Login Box */
-    .login-container {
+    .container {
+      width: 90%;
+      max-width: 350px;
       padding: 30px;
       border-radius: 10px;
-      width: 300px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
       transition: background-color 0.3s, box-shadow 0.3s;
     }
 
-    .login-container h2 {
+    h2 {
       text-align: center;
       margin-bottom: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 10px;
+      background-color: transparent;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tabs button.active {
+      border-bottom: 2px solid #28a745;
+      color: #28a745;
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
     }
 
     .input-field {
@@ -68,10 +100,9 @@
       margin: 10px 0;
       border-radius: 5px;
       border: 1px solid #ccc;
-      box-sizing: border-box;
     }
 
-    .login-button {
+    .button {
       width: 100%;
       padding: 10px;
       margin-top: 10px;
@@ -79,8 +110,8 @@
       color: #fff;
       border: none;
       border-radius: 5px;
-      cursor: pointer;
       font-weight: bold;
+      cursor: pointer;
     }
 
     /* Light Theme */
@@ -89,7 +120,7 @@
       color: #000;
     }
 
-    .light-theme .login-container {
+    .light-theme .container {
       background-color: #fff;
     }
 
@@ -99,9 +130,9 @@
       color: #0f0;
     }
 
-    .dark-theme .login-container {
+    .dark-theme .container {
       background-color: #1e1e1e;
-      box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
     }
 
     .dark-theme .input-field {
@@ -111,35 +142,62 @@
     }
   </style>
 </head>
-<body>
+<body class="dark-theme">
+
   <!-- Theme Toggle -->
   <div class="theme-toggle" onclick="toggleTheme()">
     <div class="toggle-circle"></div>
   </div>
 
-  <!-- Login Form -->
-  <div class="login-container">
+  <!-- Auth Container -->
+  <div class="container">
     <h2>SpyDroid</h2>
-    <input type="text" class="input-field" placeholder="Username" />
-    <input type="password" class="input-field" placeholder="Password" />
-    <button class="login-button">Login</button>
+    <div class="tabs">
+      <button class="active" onclick="switchForm('login')">Login</button>
+      <button onclick="switchForm('register')">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login" class="form active">
+      <input type="text" class="input-field" placeholder="Username" />
+      <input type="password" class="input-field" placeholder="Password" />
+      <button class="button">Login</button>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register" class="form">
+      <input type="text" class="input-field" placeholder="Username" />
+      <input type="email" class="input-field" placeholder="Email" />
+      <input type="password" class="input-field" placeholder="Password" />
+      <input type="password" class="input-field" placeholder="Confirm Password" />
+      <button class="button">Register</button>
+    </div>
   </div>
 
   <script>
-    // Apply saved theme on load
-    window.onload = function () {
+    // Theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark-theme');
+      document.body.classList.toggle('light-theme');
+
+      // Save preference
+      const theme = document.body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
+      localStorage.setItem('theme', theme);
+    }
+
+    // Restore theme on load
+    window.onload = () => {
       const saved = localStorage.getItem('theme');
-      document.body.className = saved ? saved : 'dark-theme';
+      if (saved) document.body.className = saved;
     };
 
-    // Toggle theme and save it
-    function toggleTheme() {
-      const body = document.body;
-      body.classList.toggle('dark-theme');
-      body.classList.toggle('light-theme');
+    // Switch forms
+    function switchForm(formId) {
+      document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+      document.getElementById(formId).classList.add('active');
 
-      const theme = body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
-      localStorage.setItem('theme', theme);
+      document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.tabs button[onclick*="${formId}"]`).classList.add('active');
     }
   </script>
 </body>
