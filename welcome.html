@@ -1,9 +1,0 @@
-Welcome - SpyDroid body { margin: 0; font-family: Arial, sans-serif; background-color: #000; color: #0f0; height: 100vh; display: flex; flex-direction: column; } <pre><code>.popup { position: fixed; top: 30%; left: 50%; transform: translate(-50%, -50%); background: #28a745; color: white; padding: 20px 40px; border-radius: 10px; font-weight: bold; z-index: 1000; } .content { flex: 1; display: flex; width: 100%; } .sidebar { width: 150px; background-color: #111; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; } .divider { width: 2px; background-color: #0f0; height: 100%; } .main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; } .camera-button { padding: 10px 20px; background-color: #28a745; border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; } video { width: 100%; max-width: 600px; border: 2px solid #0f0; border-radius: 10px; } @media (max-width: 768px) { .content { flex-direction: column; } .sidebar { width: 100%; flex-direction: row; justify-content: space-around; padding: 10px; } .divider { height: 2px; width: 100%; } } </code></pre> 
-
-Welcome!
-
-Camera 
-
-<!-- Divider --> <div class="divider"></div> <!-- Main Area with Video Player --> <div class="main"> <video id="video" autoplay playsinline></video> </div> 
-
-function startCamera() { const video = document.getElementById("video"); navigator.mediaDevices.getUserMedia({ video: true, audio: false }) .then(stream => { video.srcObject = stream; }) .catch(error => { alert("Camera access denied or unavailable."); console.error("Camera error:", error); }); } // Show welcome popup for 2 seconds window.onload = () => { const popup = document.getElementById("popup"); popup.style.display = "block"; setTimeout(() => { popup.style.display = "none"; }, 2000); }; 
